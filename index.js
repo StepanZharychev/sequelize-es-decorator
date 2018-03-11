@@ -1,6 +1,6 @@
 const elasticsearch = require('elasticsearch');
-const {typeCheck} = require('type-check');
-const {types} = require('./config/constants');
+const { typeCheck } = require('type-check');
+const { types } = require('./config/constants');
 const decorateAdd = require('./methods/add');
 const decorateUpdate = require('./methods/update');
 const decorateRemove = require('./methods/remove');
@@ -21,11 +21,21 @@ class Decorator {
         }
     }
 
-    decorate (model) {
+    decorate(model) {
         if (model.getSearchOptions) {
             const options = model.getSearchOptions();
 
             if (options && typeCheck(types.modelIndexConfig, options)) {
+                this.client.indices.exists({
+                    index: `${this.database}_${options.type}`
+                }).then(status => {
+                    if (!status) {
+                        this.client.indices.create({
+                            index: `${this.database}_${options.type}`
+                        });
+                    }
+                });
+
                 decorateAdd(model, this.client, this.database);
                 decorateUpdate(model, this.client, this.database);
                 decorateRemove(model, this.client, this.database);
