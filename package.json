@@ -1,6 +1,6 @@
 {
   "name": "sequelize-es-decorator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Decorator for Sequelize models that enables auto-indexing of data that goes through the model.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,10 @@
   ],
   "author": "Stepan Zharychev",
   "license": "ISC",
-  "git": "https://github.com/StepanZharychev/sequelize-es-decorator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StepanZharychev/sequelize-es-decorator.git"
+  },
   "dependencies": {
     "elasticsearch": "^14.1.0",
     "type-check": "^0.3.2"
