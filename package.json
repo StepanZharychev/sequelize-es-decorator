@@ -1,0 +1,21 @@
+{
+  "name": "sequelize-es-decorator",
+  "version": "1.0.0",
+  "description": "Decorator for Sequelize models that enables auto-indexing of data that goes through the model.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sequelize",
+    "elasticsearch",
+    "orm",
+    "decorator"
+  ],
+  "author": "Stepan Zharychev",
+  "license": "ISC",
+  "dependencies": {
+    "elasticsearch": "^14.1.0",
+    "type-check": "^0.3.2"
+  }
+}
