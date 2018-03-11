@@ -16,7 +16,7 @@ module.exports = (model, client, database) => {
             });
 
             await client.index({
-                index: `${database}_${model.getSearchOptions().type}`,
+                index: `${database}_${options.type}`,
                 id: entry.id,
                 type: 'doc',
                 body

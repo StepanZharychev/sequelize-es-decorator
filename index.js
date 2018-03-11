@@ -1,10 +1,10 @@
 const elasticsearch = require('elasticsearch');
 const {typeCheck} = require('type-check');
 const {types} = require('./config/constants');
-const decorateAdd = require('methods/add');
-const decorateUpdate = require('methods/update');
-const decorateRemove = require('methods/remove');
-const decorateIndex = require('methods/index');
+const decorateAdd = require('./methods/add');
+const decorateUpdate = require('./methods/update');
+const decorateRemove = require('./methods/remove');
+const decorateIndex = require('./methods/index');
 
 class Decorator {
     constructor(esConfig, database) {
