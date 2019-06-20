@@ -1,6 +1,6 @@
 {
   "name": "sequelize-es-decorator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Decorator for Sequelize models that enables auto-indexing of data that goes through the model.",
   "main": "index.js",
   "scripts": {

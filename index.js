@@ -40,7 +40,7 @@ class Decorator {
                         });
                     } else if (this.indexSetting) {
                         this.client.indices.close({index: `${this.database}_${options.type}`})
-                            .then(() => this.client.indices.putSettings(this.indexSetting))
+                            .then(() => this.client.indices.putSettings({index: `${this.database}_${options.type}`, body: this.indexSetting}))
                             .then(() => this.client.indices.open({index: `${this.database}_${options.type}`}));
                     }
                 });
