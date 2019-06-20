@@ -1,13 +1,13 @@
 const elasticsearch = require('elasticsearch');
-const { typeCheck } = require('type-check');
-const { types } = require('./config/constants');
+const {typeCheck} = require('type-check');
+const {types} = require('./config/constants');
 const decorateAdd = require('./methods/add');
 const decorateUpdate = require('./methods/update');
 const decorateRemove = require('./methods/remove');
 const decorateIndex = require('./methods/index');
 
 class Decorator {
-    constructor(esConfig, database) {
+    constructor(esConfig, database, indexSetting) {
         if (esConfig) {
             this.client = new elasticsearch.Client(esConfig);
         } else {
@@ -19,6 +19,8 @@ class Decorator {
         } else {
             throw new Error('Database name must be non-empty string.');
         }
+
+        this.indexSetting = indexSetting;
     }
 
     decorate(model) {
@@ -30,9 +32,16 @@ class Decorator {
                     index: `${this.database}_${options.type}`
                 }).then(status => {
                     if (!status) {
-                        this.client.indices.create({
+                        this.client.indices.create(this.indexSetting ? {
+                            index: `${this.database}_${options.type}`,
+                            body: this.indexSetting
+                        } : {
                             index: `${this.database}_${options.type}`
                         });
+                    } else if (this.indexSetting) {
+                        this.client.indices.close({index: `${this.database}_${options.type}`})
+                            .then(() => this.client.indices.putSettings(this.indexSetting))
+                            .then(() => this.client.indices.open({index: `${this.database}_${options.type}`}));
                     }
                 });
 
