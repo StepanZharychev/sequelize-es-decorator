@@ -5,6 +5,7 @@ const decorateAdd = require('./methods/add');
 const decorateUpdate = require('./methods/update');
 const decorateRemove = require('./methods/remove');
 const decorateIndex = require('./methods/index');
+const decorateApplySettings = require('./methods/applySettings');
 
 class Decorator {
     constructor(esConfig, database, indexSetting) {
@@ -38,10 +39,6 @@ class Decorator {
                         } : {
                             index: `${this.database}_${options.type}`
                         });
-                    } else if (this.indexSetting) {
-                        this.client.indices.close({index: `${this.database}_${options.type}`})
-                            .then(() => this.client.indices.putSettings({index: `${this.database}_${options.type}`, body: this.indexSetting}))
-                            .then(() => this.client.indices.open({index: `${this.database}_${options.type}`}));
                     }
                 });
 
@@ -49,6 +46,7 @@ class Decorator {
                 decorateUpdate(model, this.client, this.database);
                 decorateRemove(model, this.client, this.database);
                 decorateIndex(model, this.client, this.database);
+                decorateApplySettings(model, this.client, this.database, this.indexSetting);
 
                 return model;
             } else {
