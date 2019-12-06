@@ -31,11 +31,14 @@ class Decorator {
             if (options && typeCheck(types.modelIndexConfig, options)) {
                 this.client.indices.exists({
                     index: `${this.database}_${options.type}`
-                }).then(status => {
+                }).then(res => {
+                    const status = !(res.statusCode === 404);
                     if (!status) {
                         this.client.indices.create(this.indexSetting ? {
                             index: `${this.database}_${options.type}`,
-                            body: this.indexSetting
+                            body: {
+                                settings: this.indexSetting
+                            }
                         } : {
                             index: `${this.database}_${options.type}`
                         });
