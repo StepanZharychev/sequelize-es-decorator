@@ -1,4 +1,4 @@
-const elasticsearch = require('elasticsearch');
+const elasticsearch = require('@elastic/elasticsearch');
 const {typeCheck} = require('type-check');
 const {types} = require('./config/constants');
 const decorateAdd = require('./methods/add');
