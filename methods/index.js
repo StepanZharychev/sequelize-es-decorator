@@ -13,7 +13,7 @@ module.exports = (model, client, database) => {
                 doc[key] = entry[key];
             });
 
-            return [{ index: { _index: `${database}_${options.type}`, _id: entry.id } }, doc];
+            return [{ index: { _index: `${database}_${options.type}`, _type: 'doc', _id: entry.id } }, doc];
         });
 
         if (body && body.length) {
