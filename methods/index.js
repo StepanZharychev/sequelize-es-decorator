@@ -15,7 +15,14 @@ module.exports = (model, client, database) => {
 
             return [{ index: { _index: `${database}_${options.type}`, _id: entry.id } }, doc];
         });
-        const { body: bulkResponse } = await client.bulk({ refresh: true, body });
+
+        if (body && body.length) {
+            try {
+                const { body: bulkResponse } = await client.bulk({ refresh: true, body });
+            } catch (err) {
+                console.log(err);
+            }
+        }
 
         return entries.length;
     };
