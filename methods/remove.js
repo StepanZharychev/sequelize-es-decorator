@@ -1,6 +1,6 @@
 const methods = require('../config/constants').methods['sequelize'];
 
-module.exports = (model, client, database) => {
+module.exports = (model, client, database, globalOptions) => {
     const originalRemove = model[methods.remove];
     const options = model.getSearchOptions();
 
@@ -21,11 +21,18 @@ module.exports = (model, client, database) => {
         for (let index = 0; index < entries.length; index++) {
             let entry = entries[index];
 
-            await client.delete({
-                index: `${database}_${options.type}`,
-                id: entry.id,
-                type: 'doc'
-            });
+            try {
+                await client.delete({
+                    index: `${database}_${options.type}`,
+                    id: entry.id,
+                    type: 'doc'
+                });
+            } catch (err) {
+                globalOptions.handleError && globalOptions.handleError(err);
+                if (!globalOptions.softMode) {
+                    throw err;
+                }
+            }
 
             processedLength++;
 

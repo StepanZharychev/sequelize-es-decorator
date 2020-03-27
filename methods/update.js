@@ -1,6 +1,6 @@
 const methods = require('../config/constants').methods['sequelize'];
 
-module.exports = (model, client, database) => {
+module.exports = (model, client, database, globalOptions) => {
     const originalUpdateMethod = model[methods.update];
     const options = model.getSearchOptions();
 
@@ -23,7 +23,16 @@ module.exports = (model, client, database) => {
                     id: updatedEntry.id,
                     type: 'doc',
                     body
-                }).then(() => resolve(updated));
+                })
+                    .then(() => resolve(updated))
+                    .catch(err => {
+                        globalOptions.handleError && globalOptions.handleError(err);
+                        if (globalOptions.softMode) {
+                            resolve(updated);
+                        } else {
+                            throw err;
+                        }
+                    });
             });
         });
     };

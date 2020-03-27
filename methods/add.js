@@ -1,6 +1,6 @@
 const methods = require('../config/constants').methods['sequelize'];
 
-module.exports = (model, client, database) => {
+module.exports = (model, client, database, globalOptions) => {
     const originalCreateMethod = model[methods.create];
     const options = model.getSearchOptions();
 
@@ -20,7 +20,16 @@ module.exports = (model, client, database) => {
                     id: created.id,
                     type: 'doc',
                     body
-                }).then(() => resolve(created));
+                })
+                    .then(() => resolve(created))
+                    .catch(err => {
+                        globalOptions.handleError && globalOptions.handleError(err);
+                        if (globalOptions.softMode) {
+                            resolve(created);
+                        } else {
+                            throw err;
+                        }
+                    });
             });
         });
     };

@@ -8,7 +8,7 @@ const decorateIndex = require('./methods/index');
 const decorateApplySettings = require('./methods/applySettings');
 
 class Decorator {
-    constructor(esConfig, database, indexSetting) {
+    constructor(esConfig, database, indexSetting, options) {
         if (esConfig) {
             this.client = new elasticsearch.Client(esConfig);
         } else {
@@ -22,6 +22,7 @@ class Decorator {
         }
 
         this.indexSetting = indexSetting;
+        this.options = options || {};
     }
 
     decorate(model) {
@@ -45,9 +46,9 @@ class Decorator {
                     }
                 });
 
-                decorateAdd(model, this.client, this.database);
-                decorateUpdate(model, this.client, this.database);
-                decorateRemove(model, this.client, this.database);
+                decorateAdd(model, this.client, this.database, this.options);
+                decorateUpdate(model, this.client, this.database, this.options);
+                decorateRemove(model, this.client, this.database, this.options);
                 decorateIndex(model, this.client, this.database);
                 decorateApplySettings(model, this.client, this.database, this.indexSetting);
 
